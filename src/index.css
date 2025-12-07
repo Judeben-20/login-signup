@@ -1,0 +1,451 @@
+/* Reset & base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: dark;
+  --bg-color: #020617;
+  --card-bg: rgba(15, 23, 42, 0.78);
+  --card-border: rgba(148, 163, 184, 0.2);
+  --accent: #38bdf8;
+  --accent-soft: rgba(56, 189, 248, 0.2);
+  --text-main: #e5e7eb;
+  --text-muted: #9ca3af;
+  --radius-lg: 1.25rem;
+  --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.85);
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+    'Segoe UI', sans-serif;
+  background: var(--bg-color);
+  color: var(--text-main);
+}
+
+/* App layout */
+.app-root {
+  position: relative;
+  min-height: 100vh;
+  padding: 2rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-shell {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  z-index: 1;
+}
+
+/* Animated background */
+.animated-bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(244, 63, 94, 0.12), transparent 50%),
+    radial-gradient(circle at top right, rgba(129, 140, 248, 0.15), transparent 55%),
+    radial-gradient(circle at 20% 80%, rgba(45, 212, 191, 0.13), transparent 55%),
+    radial-gradient(circle at center, #020617 0%, #020617 40%, #000 100%);
+}
+
+/* Subtle moving grid overlay */
+.animated-bg::before {
+  content: '';
+  position: absolute;
+  inset: -120px;
+  background-image:
+    linear-gradient(
+      rgba(148, 163, 184, 0.07) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(148, 163, 184, 0.07) 1px,
+      transparent 1px
+    );
+  background-size: 80px 80px;
+  mix-blend-mode: soft-light;
+  opacity: 0.4;
+  animation: driftGrid 40s linear infinite alternate;
+}
+
+/* Grain/noise layer */
+.animated-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+}
+
+/* Floating orbs */
+.bg-orb {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 999px;
+  filter: blur(90px);
+  opacity: 0.75;
+  mix-blend-mode: screen;
+  transform: translate3d(0, 0, 0);
+}
+
+.orb-1 {
+  top: -10%;
+  left: -10%;
+  background: radial-gradient(circle at 30% 30%, #38bdf8, #1d4ed8 60%, transparent 70%);
+  animation: floatOrb1 28s ease-in-out infinite alternate;
+}
+
+.orb-2 {
+  top: 55%;
+  right: -12%;
+  background: radial-gradient(circle at 20% 20%, #f97316, #ec4899 60%, transparent 70%);
+  animation: floatOrb2 32s ease-in-out infinite alternate;
+}
+
+.orb-3 {
+  bottom: -18%;
+  left: 5%;
+  background: radial-gradient(circle at 20% 30%, #22c55e, #0f766e 60%, transparent 70%);
+  animation: floatOrb3 36s ease-in-out infinite alternate;
+}
+
+.orb-4 {
+  top: 10%;
+  right: 25%;
+  background: radial-gradient(circle at 50% 30%, #a855f7, #1d4ed8 60%, transparent 70%);
+  animation: floatOrb4 26s ease-in-out infinite alternate;
+}
+
+/* Cards & UI */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-soft);
+  padding: 1.75rem 1.75rem 1.5rem;
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 55%);
+  opacity: 0.75;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.card-header {
+  margin-bottom: 1.5rem;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: -0.03em;
+}
+
+.card-subtitle {
+  margin: 0.35rem 0 0;
+  font-size: 0.93rem;
+  color: var(--text-muted);
+}
+
+.card-footer-text {
+  margin-top: 1.25rem;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Forms */
+.form {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.form-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  display: grid;
+  gap: 0.3rem;
+}
+
+.form-input {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-main);
+  padding: 0.65rem 0.8rem;
+  font-size: 0.92rem;
+  outline: none;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    background 150ms ease;
+}
+
+.form-input::placeholder {
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.form-input:focus {
+  border-color: rgba(56, 189, 248, 0.9);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.7);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+/* Buttons */
+.btn-primary,
+.btn-outline {
+  border-radius: 999px;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 140ms ease,
+    box-shadow 140ms ease,
+    transform 80ms ease,
+    border-color 140ms ease;
+}
+
+.btn-primary {
+  background: linear-gradient(
+    135deg,
+    #38bdf8,
+    #6366f1
+  );
+  color: #0b1120;
+  border-color: rgba(56, 189, 248, 0.7);
+  box-shadow:
+    0 12px 25px rgba(37, 99, 235, 0.55),
+    0 0 0 1px rgba(15, 23, 42, 0.8);
+  margin-top: 0.35rem;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(
+    135deg,
+    #0ea5e9,
+    #4f46e5
+  );
+  transform: translateY(-0.5px);
+  box-shadow:
+    0 18px 35px rgba(37, 99, 235, 0.7),
+    0 0 0 1px rgba(15, 23, 42, 0.8);
+}
+
+.btn-primary:active {
+  transform: translateY(0.5px) scale(0.99);
+  box-shadow:
+    0 8px 18px rgba(37, 99, 235, 0.6),
+    0 0 0 1px rgba(15, 23, 42, 0.9);
+}
+
+.btn-outline {
+  background: rgba(15, 23, 42, 0.7);
+  border-color: rgba(148, 163, 184, 0.6);
+  color: var(--text-main);
+  padding-inline: 0.9rem;
+}
+
+.btn-outline:hover {
+  border-color: rgba(56, 189, 248, 0.7);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.btn-outline:active {
+  transform: translateY(0.5px) scale(0.99);
+}
+
+/* Text link button */
+.link-button {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  color: var(--accent);
+  text-decoration: none;
+  position: relative;
+}
+
+.link-button::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #38bdf8, #6366f1);
+  transition: width 120ms ease;
+}
+
+.link-button:hover::after {
+  width: 100%;
+}
+
+/* Dashboard */
+.dashboard-card {
+  padding-top: 1.5rem;
+  padding-bottom: 1.8rem;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+.dash-item {
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.96),
+      rgba(15, 23, 42, 0.85)
+    );
+  padding: 0.85rem 0.9rem 0.95rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dash-item::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: radial-gradient(circle at top right, var(--accent-soft), transparent 55%);
+  opacity: 0.7;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.dash-item-title {
+  margin: 0;
+  font-size: 0.93rem;
+  letter-spacing: -0.02em;
+}
+
+.dash-item-text {
+  margin: 0.3rem 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* Animations */
+@keyframes driftGrid {
+  0% {
+    transform: translate3d(0px, 0px, 0);
+  }
+  100% {
+    transform: translate3d(-80px, -60px, 0);
+  }
+}
+
+@keyframes floatOrb1 {
+  0% {
+    transform: translate3d(-20px, 0px, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(30px, 40px, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(80px, 5px, 0) scale(0.98);
+  }
+}
+
+@keyframes floatOrb2 {
+  0% {
+    transform: translate3d(40px, 20px, 0) scale(1.05);
+  }
+  50% {
+    transform: translate3d(-60px, -40px, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(-120px, 0px, 0) scale(1.08);
+  }
+}
+
+@keyframes floatOrb3 {
+  0% {
+    transform: translate3d(-40px, -20px, 0) scale(1.1);
+  }
+  50% {
+    transform: translate3d(40px, 20px, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(80px, -10px, 0) scale(1.05);
+  }
+}
+
+@keyframes floatOrb4 {
+  0% {
+    transform: translate3d(0px, -30px, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-40px, 10px, 0) scale(0.96);
+  }
+  100% {
+    transform: translate3d(20px, 40px, 0) scale(1.06);
+  }
+}
+
+/* Responsive tweaks */
+@media (min-width: 720px) {
+  .app-root {
+    padding: 3rem 2rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animated-bg::before,
+  .bg-orb {
+    animation: none !important;
+  }
+}
